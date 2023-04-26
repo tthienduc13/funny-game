@@ -38,14 +38,14 @@ function GameConsole({
     ? question.answerChoices
     : [];
 
-  const handleChoices = (index: number, choice: string) => {
+  const handleChoices = (choice: string) => {
     const newPlayerList = [...playerList];
     const currentPlayer = newPlayerList[playerTurn];
     currentPlayer.answer[playRound - 1] = choice;
     setPlayerList(newPlayerList);
   };
 
-  const handlePlayerTurn = (turn: number, correct: string) => {
+  const handlePlayerTurn = (correct: string) => {
     playerList[playerTurn].correctAnswer.push(correct);
     if (countdown === 0) {
       playerList[playerTurn].answer.push("Empty");
@@ -68,14 +68,14 @@ function GameConsole({
       }
     }
     if (playerTurn === 0) {
-      handlePlayerTurn(playerTurn, correctChar);
+      handlePlayerTurn(correctChar);
       const newQuestion = {
         ...question,
         question: "",
       };
       setQuestion(newQuestion);
     } else if (playerTurn === 1) {
-      handlePlayerTurn(playerTurn, correctChar);
+      handlePlayerTurn(correctChar);
       window.localStorage.setItem("playRound", JSON.stringify(playRound + 1));
       const newQuestion = {
         ...question,
@@ -146,7 +146,7 @@ function GameConsole({
                   ></div>
                   <p
                     onClick={() =>
-                      handleChoices(index, String.fromCharCode(65 + index))
+                      handleChoices(String.fromCharCode(65 + index))
                     }
                     className="w-11/12"
                   >
