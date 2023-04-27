@@ -1,7 +1,5 @@
-
-
 import gameLogo from "../assets/gameLogo.png";
-
+import { Link } from "react-router-dom";
 function Home() {
   return (
     <>
@@ -11,11 +9,11 @@ function Home() {
             <img src={gameLogo}></img>
           </div>
           <div className="text-4xl font-bold text-[#505150]">Funny Game</div>
-          <a href="/create-game">
+          <Link to={"/create-game"}>
             <button className="text-lg text-[#59595a] px-8 py-1 border-2 mt-4 border-[#818181] bg-[#cccccc] rounded-md">
               Start Game
             </button>
-          </a>
+          </Link>
         </div>
       </div>
     </>
