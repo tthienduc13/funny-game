@@ -13,6 +13,7 @@ function Winner({ playerList, setPlayerList }: Iprops) {
   const handleNextGame = () => {
     localStorage.setItem("match", JSON.stringify(match + 1));
     localStorage.setItem("playRound", JSON.stringify(1));
+    localStorage.setItem("winner", JSON.stringify(""));
     setPlayerList([
       {
         id: 1,
