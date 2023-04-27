@@ -1,6 +1,7 @@
 import { Istate as Props } from "../App";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+
 interface Iprops {
   playerList: Props["playerList"];
   setPlayerList: React.Dispatch<React.SetStateAction<Props["playerList"]>>;
@@ -41,7 +42,9 @@ function GameConsole({
   const handleChoices = (choice: string) => {
     const newPlayerList = [...playerList];
     const currentPlayer = newPlayerList[playerTurn];
-    currentPlayer.answer[playRound - 1] = choice;
+    if (choice === null) {
+      currentPlayer.answer[playRound - 1] = "Empty";
+    }
     setPlayerList(newPlayerList);
   };
 
@@ -49,7 +52,7 @@ function GameConsole({
     playerList[playerTurn].correctAnswer.push(correct);
     if (countdown === 0) {
       playerList[playerTurn].answer.push("Empty");
-    }
+    } 
     playerList[playerTurn].time += 10 - countdown;
     window.localStorage.setItem(
       "playerTurn",

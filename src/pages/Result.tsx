@@ -100,7 +100,9 @@ function Result({ playerList }: Iprops) {
                   {data.playerName}
                 </div>
                 <div className="w-1/5 flex justify-center items-center p-2 border-2 border-t-0 border-l-0 border-[#818181]">
-                  {data.answer.join(" , ")}
+                  {data.answer
+                    .map((answer) => (answer ? answer : "Empty"))
+                    .join(" , ")}
                 </div>
                 <div className="w-1/5 flex justify-center items-center p-2 border-2 border-t-0 border-l-0 border-[#818181]">
                   {data.correctAnswer.join(" , ")}
