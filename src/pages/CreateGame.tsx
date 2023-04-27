@@ -16,9 +16,6 @@ function CreateGame({ playerList, setPlayerList }: Iprops) {
     } else if (!isValidInput(name1, name2)) {
       alert("Invalid Player Name");
     } else {
-      localStorage.setItem("match", "1");
-      localStorage.setItem("playerTurn", "0");
-      localStorage.setItem("playRound", "1");
       setPlayerList([
         ...playerList,
         {
@@ -38,11 +35,14 @@ function CreateGame({ playerList, setPlayerList }: Iprops) {
           time: 0,
         },
       ]);
+      localStorage.setItem("match", "1");
+      localStorage.setItem("playerTurn", "0");
+      localStorage.setItem("playRound", "1");
       navigate("/game");
     }
   };
   useEffect(() => {
-    window.localStorage.setItem("playerList", JSON.stringify(playerList));
+    localStorage.setItem("playerList", JSON.stringify(playerList));
   }, [playerList]);
   const handleSubmit = () => {
     addPlayer();

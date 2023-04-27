@@ -52,9 +52,9 @@ function GameConsole({
     playerList[playerTurn].correctAnswer.push(correct);
     if (countdown === 0) {
       playerList[playerTurn].answer.push("Empty");
-    } 
+    }
     playerList[playerTurn].time += 10 - countdown;
-    window.localStorage.setItem(
+    localStorage.setItem(
       "playerTurn",
       JSON.stringify(Math.abs(playerTurn - 1))
     );
@@ -79,7 +79,7 @@ function GameConsole({
       setQuestion(newQuestion);
     } else if (playerTurn === 1) {
       handlePlayerTurn(correctChar);
-      window.localStorage.setItem("playRound", JSON.stringify(playRound + 1));
+      localStorage.setItem("playRound", JSON.stringify(playRound + 1));
       const newQuestion = {
         ...question,
         question: "",
