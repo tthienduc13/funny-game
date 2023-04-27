@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Istate as Props } from "../App";
 import { isValidInput } from "../utils";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,9 @@ function CreateGame({ playerList, setPlayerList }: Iprops) {
     } else if (!isValidInput(name1, name2)) {
       alert("Invalid Player Name");
     } else {
+      localStorage.setItem("match", "1");
+      localStorage.setItem("playerTurn", "0");
+      localStorage.setItem("playRound", "1");
       setPlayerList([
         ...playerList,
         {
@@ -35,15 +38,10 @@ function CreateGame({ playerList, setPlayerList }: Iprops) {
           time: 0,
         },
       ]);
-      localStorage.setItem("match", "1");
-      localStorage.setItem("playerTurn", "0");
-      localStorage.setItem("playRound", "1");
       navigate("/game");
     }
   };
-  useEffect(() => {
-    localStorage.setItem("playerList", JSON.stringify(playerList));
-  }, [playerList]);
+
   const handleSubmit = () => {
     addPlayer();
   };

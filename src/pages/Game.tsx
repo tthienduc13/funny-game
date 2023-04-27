@@ -19,7 +19,7 @@ interface Istate {
 
 function Game({ playerList, setPlayerList }: Iprops) {
   const [question, setQuestion] = useState<Istate["question"]>(
-    JSON.parse(`${localStorage.getItem("question")}`) ?? {
+    JSON.parse(`${window.localStorage.getItem("question")}`) ?? {
       question: "",
       correctAnswer: "",
       incorrectAnswer: "",
@@ -30,10 +30,11 @@ function Game({ playerList, setPlayerList }: Iprops) {
   const [loadingMatch, setLoadingMatch] = useState<boolean>(true);
   const [loadingRound, setLoadingRound] = useState<boolean>(false);
   const playerTurn: number =
-    JSON.parse(`${localStorage.getItem("playerTurn")}`) ?? 0;
+    JSON.parse(`${window.localStorage.getItem("playerTurn")}`) ?? 0;
   const playRound: number =
-    JSON.parse(`${localStorage.getItem("playRound")}`) ?? 0;
-  const match: number = JSON.parse(`${localStorage.getItem("match")}`) ?? 0;
+    JSON.parse(`${window.localStorage.getItem("playRound")}`) ?? 0;
+  const match: number =
+    JSON.parse(`${window.localStorage.getItem("match")}`) ?? 0;
   const totalRounds: number = 3;
   const fetchQuestion = async () => {
     try {
@@ -62,7 +63,6 @@ function Game({ playerList, setPlayerList }: Iprops) {
       setLoadingMatch(false);
     }
   }, [playerTurn]);
-  console.log(question);
   return (
     <>
       {loadingMatch && <LoadingMatch match={match}></LoadingMatch>}

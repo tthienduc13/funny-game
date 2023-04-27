@@ -8,7 +8,8 @@ interface Iprops {
 function Winner({ playerList, setPlayerList }: Iprops) {
   const navigate = useNavigate();
   const winner = localStorage.getItem("winner") ?? "Empty";
-  const match: number = JSON.parse(`${localStorage.getItem("match")}`) ?? 0;
+  const match: number =
+    JSON.parse(`${window.localStorage.getItem("match")}`) ?? 0;
   const handleNextGame = () => {
     localStorage.setItem("match", JSON.stringify(match + 1));
     localStorage.setItem("playRound", JSON.stringify(1));

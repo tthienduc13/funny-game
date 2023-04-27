@@ -23,7 +23,7 @@ export interface Istate {
 }
 function App() {
   const [playerList, setPlayerList] = useState<Istate["playerList"]>(
-    JSON.parse(`${localStorage.getItem("playerList")}`) || []
+    JSON.parse(`${window.localStorage.getItem("playerList")}`) || []
   );
   useEffect(() => {
     localStorage.setItem("playerList", JSON.stringify(playerList));

@@ -1,5 +1,6 @@
 import { Istate as Props } from "../App";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 interface Iprops {
   playerList: Props["playerList"];
 }
@@ -30,7 +31,7 @@ function Result({ playerList }: Iprops) {
     return {
       id: index + 1,
       playerName: player.name,
-      answer: player.answer,
+      answer: player.answer.map((answer) => (answer ? answer : "Empty")),
       correctAnswer: player.correctAnswer,
       score: score,
       time: player.time,
@@ -59,11 +60,11 @@ function Result({ playerList }: Iprops) {
         <div className="lg:w-3/5 md:w-4/5 w-11/12 bg-[#f5f5f5] flex flex-col border-2 border-[#818181] p-4">
           <div className="flex flex-row justify-between items-center border-b-2 border-[#818181] pb-4">
             <h1 className="text-2xl font-bold text-[#6e6e6e]">Game Result</h1>
-            <a href="/winner">
+            <Link to={"/winner"}>
               <button className="text-lg text-[#59595a] px-8 py-1 border-2 border-[#818181] bg-[#cccccc] rounded-md">
                 Finally
               </button>
-            </a>
+            </Link>
           </div>
           <form className="flex sm:flex-row flex-col items-strech mt-4 mx-auto">
             <input
