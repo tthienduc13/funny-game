@@ -3,10 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 interface Iprops {
   playerList: Props["playerList"];
-  setPlayerList: React.Dispatch<React.SetStateAction<Props["playerList"]>>;
   playRound: number;
   playerTurn: number;
-  totalRounds: number;
   question: {
     question: string;
     correctAnswer: string;
@@ -24,32 +22,23 @@ interface Iprops {
 }
 function GameConsole({
   playerList,
-  setPlayerList,
   playerTurn,
   playRound,
-  totalRounds,
   question,
   setQuestion,
 }: Iprops) {
+  const totalRounds: number = 3;
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState<number>(10);
   const [selectedChoice, setSelectedChoice] = useState<number>(-1);
   const allAnswer: string[] = question.answerChoices
     ? question.answerChoices
     : [];
-
-  const handleChoices = (choice: string) => {
-    const newPlayerList = [...playerList];
-    const currentPlayer = newPlayerList[playerTurn];
-    currentPlayer.answer[playRound - 1] = choice;
-    setPlayerList(newPlayerList);
-  };
-
-  const handlePlayerTurn = (correct: string) => {
+  const handlePlayerTurn = (playerTurn: number, correct: number) => {
     playerList[playerTurn].correctAnswer.push(correct);
-    if (countdown === 0) {
-      playerList[playerTurn].answer.push("Empty");
-    }
+    countdown === 0
+      ? playerList[playerTurn].answer.push(-1)
+      : playerList[playerTurn].answer.push(selectedChoice);
     playerList[playerTurn].time += 10 - countdown;
     window.localStorage.setItem(
       "playerTurn",
@@ -57,25 +46,21 @@ function GameConsole({
     );
   };
   const handleSubmit = () => {
-    let correctChar = "";
-    let emptyAnswer = false;
+    let correctAnswerIndex = 0;
     for (let i = 0; i <= totalRounds; i++) {
       if (allAnswer[i] === question.correctAnswer) {
-        correctChar = String.fromCharCode(97 + i).toUpperCase();
-      }
-      if (playerList[playerTurn].answer[playRound - 1] === null) {
-        emptyAnswer = true;
+        correctAnswerIndex = i;
       }
     }
     if (playerTurn === 0) {
-      handlePlayerTurn(correctChar);
+      handlePlayerTurn(0, correctAnswerIndex);
       const newQuestion = {
         ...question,
         question: "",
       };
       setQuestion(newQuestion);
     } else if (playerTurn === 1) {
-      handlePlayerTurn(correctChar);
+      handlePlayerTurn(1, correctAnswerIndex);
       window.localStorage.setItem("playRound", JSON.stringify(playRound + 1));
       const newQuestion = {
         ...question,
@@ -86,12 +71,7 @@ function GameConsole({
         navigate("/result");
       }
     }
-    const newPlayerList = [...playerList];
-    const currentPlayer = newPlayerList[playerTurn];
-    if (emptyAnswer) {
-      currentPlayer.answer[playRound - 1] = "Empty";
-    }
-    setPlayerList(newPlayerList);
+    localStorage.setItem("playerList", JSON.stringify(playerList));
   };
   useEffect(() => {
     setTimeout(() => {
@@ -145,9 +125,9 @@ function GameConsole({
                     }
                   ></div>
                   <p
-                    onClick={() =>
-                      handleChoices(String.fromCharCode(65 + index))
-                    }
+                    // onClick={() =>
+                    //   handleChoices(String.fromCharCode(65 + index))
+                    // }
                     className="w-11/12"
                   >
                     {choices}

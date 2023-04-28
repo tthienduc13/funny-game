@@ -3,10 +3,9 @@ import { Istate as Props } from "../App";
 import { isValidInput } from "../utils";
 import { useNavigate } from "react-router-dom";
 interface Iprops {
-  playerList: Props["playerList"];
   setPlayerList: React.Dispatch<React.SetStateAction<Props["playerList"]>>;
 }
-function CreateGame({ playerList, setPlayerList }: Iprops) {
+function CreateGame({ setPlayerList }: Iprops) {
   const [name1, setName1] = useState<string>("");
   const [name2, setName2] = useState<string>("");
   const navigate = useNavigate();
@@ -16,11 +15,10 @@ function CreateGame({ playerList, setPlayerList }: Iprops) {
     } else if (!isValidInput(name1, name2)) {
       alert("Invalid Player Name");
     } else {
-      localStorage.setItem("match", "1");
-      localStorage.setItem("playerTurn", "0");
-      localStorage.setItem("playRound", "1");
+      window.localStorage.setItem("match", "1");
+      window.localStorage.setItem("playerTurn", "0");
+      window.localStorage.setItem("playRound", "1");
       setPlayerList([
-        ...playerList,
         {
           id: 1,
           name: name1,

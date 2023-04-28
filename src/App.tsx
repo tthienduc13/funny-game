@@ -9,12 +9,11 @@ export interface Istate {
   playerList: {
     id: number;
     name: string;
-    answer: string[];
-    correctAnswer: string[];
+    answer: number[];
+    correctAnswer: number[];
     score: 0;
     time: 0;
   }[];
-  match: number;
   question: {
     question: string;
     correctAnswer: string;
@@ -23,7 +22,24 @@ export interface Istate {
 }
 function App() {
   const [playerList, setPlayerList] = useState<Istate["playerList"]>(
-    JSON.parse(`${window.localStorage.getItem("playerList")}`) || []
+    JSON.parse(`${window.localStorage.getItem("playerList")}`) || [
+      {
+        id: 1,
+        name: "",
+        answer: [],
+        correctAnswer: [],
+        score: 0,
+        time: 0,
+      },
+      {
+        id: 2,
+        name: "",
+        answer: [],
+        correctAnswer: [],
+        score: 0,
+        time: 0,
+      },
+    ]
   );
   useEffect(() => {
     localStorage.setItem("playerList", JSON.stringify(playerList));
@@ -34,18 +50,11 @@ function App() {
         <Route path="/" element={<Home></Home>}></Route>
         <Route
           path="/create-game"
-          element={
-            <CreateGame
-              playerList={playerList}
-              setPlayerList={setPlayerList}
-            ></CreateGame>
-          }
+          element={<CreateGame setPlayerList={setPlayerList}></CreateGame>}
         ></Route>
         <Route
           path="/game"
-          element={
-            <Game playerList={playerList} setPlayerList={setPlayerList}></Game>
-          }
+          element={<Game playerList={playerList}></Game>}
         ></Route>
         <Route
           path="/result"

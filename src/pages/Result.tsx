@@ -14,8 +14,8 @@ interface IData {
 }
 function Result({ playerList }: Iprops) {
   const calculateScore = (
-    answers: string[],
-    correctAnswers: string[]
+    answers: number[],
+    correctAnswers: number[]
   ): number => {
     let score = 0;
     for (let i = 0; i < answers.length; i++) {
@@ -26,13 +26,28 @@ function Result({ playerList }: Iprops) {
     return score;
   };
 
+  const convertedAnswers = (answers: number[]) => {
+    let charCodeAnswers: string[] = answers.map((answer) =>
+      answer === -1 ? "Empty" : String.fromCharCode("A".charCodeAt(0) + answer)
+    );
+    return charCodeAnswers;
+  };
+
+  const convertedResults = (result: number[]) => {
+    let charCodeReults: string[] = result.map((result) =>
+      String.fromCharCode("A".charCodeAt(0) + result)
+    );
+    return charCodeReults;
+  };
   const data: IData[] = playerList.map((player, index) => {
     const score = calculateScore(player.answer, player.correctAnswer);
+    const answers = convertedAnswers(player.answer);
+    const results = convertedResults(player.correctAnswer);
     return {
       id: index + 1,
       playerName: player.name,
-      answer: player.answer.map((answer) => (answer ? answer : "Empty")),
-      correctAnswer: player.correctAnswer,
+      answer: answers,
+      correctAnswer: results,
       score: score,
       time: player.time,
     };
@@ -52,7 +67,7 @@ function Result({ playerList }: Iprops) {
   );
   const sortedWinners = winners.sort((a, b) => a.time - b.time);
   const winnerName = sortedWinners[0].playerName;
-  localStorage.setItem("winner", JSON.stringify(winnerName));
+  window.localStorage.setItem("winner", JSON.stringify(winnerName));
 
   return (
     <>
@@ -101,9 +116,7 @@ function Result({ playerList }: Iprops) {
                   {data.playerName}
                 </div>
                 <div className="w-1/5 flex justify-center items-center p-2 border-2 border-t-0 border-l-0 border-[#818181]">
-                  {data.answer
-                    .map((answer) => (answer ? answer : "Empty"))
-                    .join(" , ")}
+                  {data.answer.join(" , ")}
                 </div>
                 <div className="w-1/5 flex justify-center items-center p-2 border-2 border-t-0 border-l-0 border-[#818181]">
                   {data.correctAnswer.join(" , ")}

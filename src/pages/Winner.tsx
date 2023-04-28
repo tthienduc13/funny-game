@@ -11,9 +11,9 @@ function Winner({ playerList, setPlayerList }: Iprops) {
   const match: number =
     JSON.parse(`${window.localStorage.getItem("match")}`) ?? 0;
   const handleNextGame = () => {
-    localStorage.setItem("match", JSON.stringify(match + 1));
-    localStorage.setItem("playRound", JSON.stringify(1));
-    localStorage.setItem("winner", JSON.stringify(""));
+    window.localStorage.setItem("match", JSON.stringify(match + 1));
+    window.localStorage.setItem("playRound", JSON.stringify(1));
+    window.localStorage.setItem("winner", JSON.stringify(""));
     setPlayerList([
       {
         id: 1,
@@ -35,7 +35,27 @@ function Winner({ playerList, setPlayerList }: Iprops) {
     navigate("/game");
   };
   const handlePlayAgain = () => {
-    localStorage.clear();
+    window.localStorage.setItem("match", JSON.stringify(1));
+    window.localStorage.setItem("playRound", JSON.stringify(1));
+    window.localStorage.setItem("winner", JSON.stringify(""));
+    setPlayerList([
+      {
+        id: 1,
+        name: "",
+        answer: [],
+        correctAnswer: [],
+        score: 0,
+        time: 0,
+      },
+      {
+        id: 2,
+        name: "",
+        answer: [],
+        correctAnswer: [],
+        score: 0,
+        time: 0,
+      },
+    ]);
     navigate("/");
   };
   return (

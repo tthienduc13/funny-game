@@ -6,7 +6,7 @@ import GameConsole from "../components/GameConsole";
 import axios from "axios";
 interface Iprops {
   playerList: Props["playerList"];
-  setPlayerList: React.Dispatch<React.SetStateAction<Props["playerList"]>>;
+ 
 }
 interface Istate {
   question: {
@@ -17,15 +17,13 @@ interface Istate {
   };
 }
 
-function Game({ playerList, setPlayerList }: Iprops) {
-  const [question, setQuestion] = useState<Istate["question"]>(
-    JSON.parse(`${window.localStorage.getItem("question")}`) ?? {
-      question: "",
-      correctAnswer: "",
-      incorrectAnswer: "",
-      answerChoices: "",
-    }
-  );
+function Game({ playerList }: Iprops) {
+  const [question, setQuestion] = useState<Istate["question"]>({
+    question: "",
+    correctAnswer: "",
+    incorrectAnswer: [],
+    answerChoices: [],
+  });
 
   const [loadingMatch, setLoadingMatch] = useState<boolean>(true);
   const [loadingRound, setLoadingRound] = useState<boolean>(false);
@@ -35,7 +33,6 @@ function Game({ playerList, setPlayerList }: Iprops) {
     JSON.parse(`${window.localStorage.getItem("playRound")}`) ?? 0;
   const match: number =
     JSON.parse(`${window.localStorage.getItem("match")}`) ?? 0;
-  const totalRounds: number = 3;
   const fetchQuestion = async () => {
     try {
       setLoadingRound(true);
@@ -71,10 +68,8 @@ function Game({ playerList, setPlayerList }: Iprops) {
       ) : (
         <GameConsole
           playerList={playerList}
-          setPlayerList={setPlayerList}
           playRound={playRound}
           playerTurn={playerTurn}
-          totalRounds={totalRounds}
           question={question}
           setQuestion={setQuestion}
         ></GameConsole>
