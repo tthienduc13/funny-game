@@ -29,56 +29,44 @@ function GameConsole({
 }: Iprops) {
   const totalRounds: number = 3;
   const navigate = useNavigate();
-  const [countdown, setCountdown] = useState<number>(10);
-  const [selectedChoice, setSelectedChoice] = useState<number>(-1);
-  const allAnswer: string[] = question.answerChoices
-    ? question.answerChoices
-    : [];
-  const handlePlayerTurn = (playerTurn: number, correct: number) => {
-    playerList[playerTurn].correctAnswer.push(correct);
-    countdown === 0
-      ? playerList[playerTurn].answer.push(-1)
-      : playerList[playerTurn].answer.push(selectedChoice);
-    playerList[playerTurn].time += 10 - countdown;
-    window.localStorage.setItem(
+  const [countdown, setCountdown] = useState(10);
+  const [selectedChoice, setSelectedChoice] = useState(-1);
+  const allAnswer = question.answerChoices ?? [];
+  const handlePlayerTurn = (playerTurn: number, correctAnswerIndex: number) => {
+    const currentPlayer = playerList[playerTurn];
+    currentPlayer.correctAnswer.push(correctAnswerIndex);
+    currentPlayer.answer.push(countdown === 0 ? -1 : selectedChoice);
+    currentPlayer.time += 10 - countdown;
+    localStorage.setItem(
       "playerTurn",
       JSON.stringify(Math.abs(playerTurn - 1))
     );
   };
   const handleSubmit = () => {
-    let correctAnswerIndex = 0;
-    for (let i = 0; i <= totalRounds; i++) {
-      if (allAnswer[i] === question.correctAnswer) {
-        correctAnswerIndex = i;
-      }
-    }
+    const correctAnswerIndex = allAnswer.findIndex(
+      (answer) => answer === question.correctAnswer
+    );
     if (playerTurn === 0) {
       handlePlayerTurn(0, correctAnswerIndex);
-      const newQuestion = {
-        ...question,
-        question: "",
-      };
-      setQuestion(newQuestion);
     } else if (playerTurn === 1) {
       handlePlayerTurn(1, correctAnswerIndex);
       window.localStorage.setItem("playRound", JSON.stringify(playRound + 1));
-      const newQuestion = {
-        ...question,
-        question: "",
-      };
-      setQuestion(newQuestion);
       if (playRound + 1 > totalRounds) {
         navigate("/result");
       }
     }
+    const newQuestion = {
+      ...question,
+      question: "",
+    };
+    setQuestion(newQuestion);
     localStorage.setItem("playerList", JSON.stringify(playerList));
   };
+
   useEffect(() => {
-    setTimeout(() => {
-      setCountdown(countdown - 1);
-    }, 1000);
+    const timeout = setTimeout(() => setCountdown(countdown - 1), 1000);
     if (countdown <= 0) {
-      clearTimeout(countdown);
+      clearTimeout(timeout);
       handleSubmit();
     }
   }, [countdown]);
@@ -106,32 +94,23 @@ function GameConsole({
               {allAnswer.map((choices, index) => (
                 <li
                   key={index}
-                  onClick={
-                    index !== selectedChoice
-                      ? () => setSelectedChoice(index)
-                      : () => setSelectedChoice(-1)
+                  onClick={() =>
+                    setSelectedChoice(index === selectedChoice ? -1 : index)
                   }
-                  className={
+                  className={`flex flex-row items-center text-lg border-2 border-[#818181] px-2 cursor-pointer ${
                     index === selectedChoice
-                      ? "flex flex-row items-center text-lg bg-[#818181] text-[#fff] border-2 border-[#818181] px-2 cursor-pointer"
-                      : "flex flex-row items-center text-lg text-[#818181] border-2 border-[#818181] px-2 cursor-pointer"
-                  }
+                      ? "bg-[#818181] text-[#fff] border-[#818181]"
+                      : "text-[#818181] border-[#888]"
+                  }`}
                 >
                   <div
-                    className={
+                    className={`w-4 h-4 mr-2 rounded-full border-2 ${
                       index === selectedChoice
-                        ? "w-4 h-4 mr-2 rounded-full border-2 border-[#fff]"
-                        : "w-4 h-4 mr-2 rounded-full border-2 border-[#888]"
-                    }
+                        ? "border-[#fff]"
+                        : "border-[#888]"
+                    }`}
                   ></div>
-                  <p
-                    // onClick={() =>
-                    //   handleChoices(String.fromCharCode(65 + index))
-                    // }
-                    className="w-11/12"
-                  >
-                    {choices}
-                  </p>
+                  <p className="w-11/12">{choices}</p>
                 </li>
               ))}
             </ul>

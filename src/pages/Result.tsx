@@ -66,7 +66,7 @@ function Result({ playerList }: Iprops) {
     (item) => item.score === Math.max(...filteredData.map((item) => item.score))
   );
   const sortedWinners = winners.sort((a, b) => a.time - b.time);
-  const winnerName = sortedWinners[0].playerName;
+  const winnerName = sortedWinners[0].playerName.toUpperCase();
   window.localStorage.setItem("winner", JSON.stringify(winnerName));
 
   return (
